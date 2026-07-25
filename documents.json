@@ -8,8 +8,8 @@ function renderDocuments(docs) {
   }
 
   docs.forEach(doc => {
-    // framework qovluğundakı tək index.html-ə ID parametri ilə keçid
-    const docUrl = `./framework/?id=${doc.id}`;
+    // Keçid yolunu dəqiqləşdirdik (noktə-sləş olmadan)
+    const docUrl = `framework/?id=${doc.id}`;
     const docNo = doc.no ? `<span class="doc-badge">№ ${doc.no}</span>` : '';
 
     const item = document.createElement('a');
