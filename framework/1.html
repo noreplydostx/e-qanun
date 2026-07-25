@@ -36,8 +36,8 @@
 
   <div class="nav-bar">
     <div class="nav-container">
-      <!-- DÜZƏLİŞ: 2 mərtəbə yuxarı (ana səhifəyə) qayıdır -->
-      <a href="../../" class="back-link">&larr; Ana səhifəyə qayıt</a>
+      <!-- 1 mərtəbə yuxarı (ana səhifəyə) qayıdır -->
+      <a href="../" class="back-link">&larr; Ana səhifəyə qayıt</a>
     </div>
   </div>
 
@@ -48,23 +48,26 @@
   </div>
 
   <script>
-    // URL-dən qovluq ID-sini dinamik olaraq tapırıq (məsələn: /framework/1/ -> "1")
-    const pathSegments = window.location.pathname.split('/').filter(p => p.length > 0);
-    const frameworkIndex = pathSegments.indexOf('framework');
-    const docId = (frameworkIndex !== -1 && pathSegments[frameworkIndex + 1]) ? pathSegments[frameworkIndex + 1] : '1';
+    // Faylın adından ID-ni götürürük (məsələn: ".../framework/1.html" -> "1")
+    const fileName = window.location.pathname.split('/').pop(); // "1.html"
+    const docId = fileName.replace('.html', ''); // "1"
 
-    // DÜZƏLİŞ: 2 mərtəbə yuxarı qalxıb documents.json faylını çəkir
-    fetch('../../documents.json')
-      .then(response => response.json())
+    // 1 mərtəbə yuxarı qalxıb documents.json faylını çəkir
+    fetch('../documents.json')
+      .then(response => {
+        if (!response.ok) throw new Error('documents.json tapılmadı');
+        return response.json();
+      })
       .then(data => {
         const doc = data.find(d => String(d.id) === String(docId));
         if (doc) {
           renderDoc(doc);
         } else {
-          document.getElementById('documentContent').innerHTML = '<div class="status-msg" style="color:#ef4444;">Axtardığınız sənəd tapılmadı.</div>';
+          document.getElementById('documentContent').innerHTML = `<div class="status-msg" style="color:#ef4444;">ID-si "${docId}" olan sənəd tapılmadı.</div>`;
         }
       })
       .catch(err => {
+        console.error(err);
         document.getElementById('documentContent').innerHTML = '<div class="status-msg" style="color:#ef4444;">Sənəd yüklənərkən xəta baş verdi.</div>';
       });
 
@@ -86,10 +89,6 @@
         </div>
       `;
     }
-  </script>
-
-</body>
-</html>
   </script>
 
 </body>
