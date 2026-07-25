@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sənədə Baxış</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0f172a;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; }
+
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+    }
+    .top-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .back-btn {
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      transition: all 0.2s;
+    }
+    .back-btn:hover { background: #e2e8f0; }
+
+    .btn-action {
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-action:hover { border-color: var(--accent); color: var(--accent); }
+
+    .doc-container {
+      max-width: 900px;
+      margin: 30px auto 60px;
+      padding: 0 20px;
+    }
+
+    .doc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+
+    .doc-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 30px;
+    }
+
+    .badge-wrap { display: flex; gap: 8px; margin-bottom: 16px; }
+    .badge {
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+
+    .doc-title { font-size: 24px; font-weight: 700; color: var(--primary); line-height: 1.35; margin-bottom: 12px; }
+    .doc-date { font-size: 14px; color: var(--text-muted); }
+
+    .doc-body { font-size: 16px; color: #334155; line-height: 1.8; }
+    .status-msg { text-align: center; padding: 60px; color: var(--text-muted); }
+
+    @media (max-width: 640px) {
+      .doc-card { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="top-container">
+      <a href="../" class="back-btn">&larr; Ana səhifəyə qayıt</a>
+      <button class="btn-action" onclick="window.print()">🖨️ Çap et</button>
+    </div>
+  </div>
+
+  <div class="doc-container">
+    <main class="doc-card">
+      <div id="documentContent">
+        <div class="status-msg">Sənəd yüklənir...</div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // URL-dən ?id=1 və ya ?id=2 parametrini çəkirik
+    const urlParams = new URLSearchParams(window.location.search);
+    const docId = urlParams.get('id');
+
+    if (!docId) {
+      document.getElementById('documentContent').innerHTML = '<div class="status-msg" style="color:#ef4444;">Sənəd İD-si qeyd olunmayıb.</div>';
+    } else {
+      fetch('../documents.json')
+        .then(res => {
+          if(!res.ok) throw new Error('Fayl tapılmadı');
+          return res.json();
+        })
+        .then(data => {
+          const doc = data.find(d => String(d.id) === String(docId));
+          if (doc) {
+            renderDoc(doc);
+          } else {
+            document.getElementById('documentContent').innerHTML = `<div class="status-msg" style="color:#ef4444;">ID-si "${docId}" olan sənəd tapılmadı.</div>`;
+          }
+        })
+        .catch(err => {
+          document.getElementById('documentContent').innerHTML = '<div class="status-msg" style="color:#ef4444;">Sənəd yüklənərkən xəta baş verdi.</div>';
+        });
+    }
+
+    function renderDoc(doc) {
+      document.title = doc.title;
+      const docNo = doc.no ? `<span class="badge">№ ${doc.no}</span>` : '';
+
+      document.getElementById('documentContent').innerHTML = `
+        <div class="doc-header">
+          <div class="badge-wrap">
+            ${docNo}
+            <span class="badge" style="background:#f1f5f9; color:#475569;">Rəsmi Akt</span>
+          </div>
+          <h1 class="doc-title">${doc.title}</h1>
+          <div class="doc-date">
+            <span>📅 Qəbul tarixi: ${doc.date}</span>
+          </div>
+        </div>
+        <div class="doc-body">
+          <p style="margin-bottom: 15px;"><strong>AZƏRBAYCAN RESPUBLİKASININ QANUNU</strong></p>
+          <p>Bu hissədə sənədin tam mətni nümayiş olunur. ${doc.title} haqqında ətraflı məlumatlar buraya daxil edilə bilər.</p>
+        </div>
+      `;
+    }
+  </script>
+
+</body>
+</html>
