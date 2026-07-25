@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-QANUN | Rəsmi Qanunvericilik Bazası</title>
+  <title>Sənədə Baxış | E-QANUN</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -16,50 +16,46 @@
       --text-muted: #475569;
       --border-color: #cbd5e1;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.5; }
-    
+    body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+
     /* Top Gov Strip */
     .gov-top-bar { background: #020617; color: #94a3b8; font-size: 12px; padding: 6px 20px; font-weight: 500; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1e293b; }
     .gov-flag-text { display: flex; align-items: center; gap: 8px; }
     .gov-flag-icon { width: 14px; height: 10px; background: linear-gradient(to bottom, #00bfff 33.3%, #ff0000 33.3%, #ff0000 66.6%, #008000 66.6%); border-radius: 1px; display: inline-block; }
 
-    /* Header */
-    header { background: linear-gradient(180deg, var(--gov-navy) 0%, #0f172a 100%); color: #fff; padding: 40px 20px 60px 20px; border-bottom: 4px solid var(--gov-blue); }
-    .header-container { max-width: 950px; margin: 0 auto; text-align: left; display: flex; justify-content: space-between; align-items: center; }
-    .header-title h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; color: #f8fafc; }
-    .header-title p { color: #94a3b8; font-size: 14px; margin-top: 4px; }
-    .header-badge { background: rgba(30, 64, 175, 0.4); border: 1px solid rgba(148, 163, 184, 0.2); padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.5px; }
+    /* Header Nav */
+    header { background: var(--gov-navy); border-bottom: 3px solid var(--gov-blue); padding: 14px 20px; }
+    .header-container { max-width: 950px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+    
+    .back-btn { text-decoration: none; color: #f8fafc; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(255,255,255,0.08); border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s; }
+    .back-btn:hover { background: rgba(255,255,255,0.18); }
+
+    .btn-print { background: var(--gov-blue); color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .btn-print:hover { background: #1d4ed8; }
 
     /* Main Container */
-    .container { max-width: 950px; margin: -30px auto 50px auto; padding: 0 20px; }
+    .container { max-width: 950px; margin: 30px auto 60px auto; padding: 0 20px; }
+
+    /* Official Document Paper Style */
+    .doc-paper { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
     
-    /* Search Box */
-    .search-card { background: var(--card-bg); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 24px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
-    .search-input-wrapper input { width: 100%; padding: 12px 16px; font-size: 15px; border: 1px solid var(--border-color); border-radius: 6px; outline: none; font-family: inherit; }
-    .search-input-wrapper input:focus { border-color: var(--gov-blue); box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1); }
+    .doc-header-block { border-bottom: 2px solid #e2e8f0; padding-bottom: 24px; margin-bottom: 30px; text-align: center; }
+    .doc-emblem { font-size: 12px; font-weight: 700; color: var(--gov-blue); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+    .doc-title { font-size: 22px; font-weight: 700; color: var(--gov-navy); line-height: 1.4; margin-bottom: 16px; }
+    
+    .doc-meta-row { display: flex; justify-content: center; align-items: center; gap: 16px; font-size: 13px; color: var(--text-muted); }
+    .doc-badge { background: var(--gov-light-blue); color: var(--gov-blue); font-weight: 600; padding: 3px 10px; border-radius: 4px; border: 1px solid #bfdbfe; }
 
-    /* Document Cards */
-    .doc-list { display: flex; flex-direction: column; gap: 12px; }
-    .doc-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: inherit; transition: all 0.2s; position: relative; overflow: hidden; }
-    .doc-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: transparent; transition: background 0.2s; }
-    .doc-card:hover { border-color: #94a3b8; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    .doc-card:hover::before { background: var(--gov-blue); }
+    .doc-body-text { font-size: 15px; color: #1e293b; line-height: 1.8; text-align: justify; }
+    .doc-body-text p { margin-bottom: 16px; }
 
-    .doc-info { display: flex; flex-direction: column; gap: 8px; }
-    .doc-title { font-size: 16px; font-weight: 600; color: var(--text-main); }
-    .doc-meta { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--text-muted); }
-    .doc-badge { background: var(--gov-light-blue); color: var(--gov-blue); font-weight: 600; padding: 2px 8px; border-radius: 4px; font-size: 12px; border: 1px solid #bfdbfe; }
-
-    .btn-view { background: #f8fafc; color: var(--gov-blue); border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; white-space: nowrap; transition: all 0.2s; }
-    .doc-card:hover .btn-view { background: var(--gov-blue); color: #fff; border-color: var(--gov-blue); }
-
-    .status-msg { text-align: center; padding: 40px; color: var(--text-muted); font-size: 14px; background: #fff; border-radius: 8px; border: 1px solid var(--border-color); }
+    .status-msg { text-align: center; padding: 60px; color: var(--text-muted); }
 
     @media (max-width: 640px) {
-      .header-container { flex-direction: column; align-items: flex-start; gap: 12px; }
-      .doc-card { flex-direction: column; align-items: flex-start; gap: 16px; }
-      .btn-view { width: 100%; text-align: center; }
+      .doc-paper { padding: 24px; }
+      .doc-title { font-size: 18px; }
     }
   </style>
 </head>
@@ -70,83 +66,69 @@
       <span class="gov-flag-icon"></span>
       <span>AZƏRBAYCAN RESPUBLİKASININ RƏSMİ HÜQUQİ PORTALI</span>
     </div>
-    <span>E-QANUN BAZASI</span>
+    <span>E-QANUN SƏNƏD REYESTRİ</span>
   </div>
 
   <header>
     <div class="header-container">
-      <div class="header-title">
-        <h1>Qanunvericilik Bazası</h1>
-        <p>Normativ hüquqi aktların vahid elektron reyestri</p>
-      </div>
-      <div class="header-badge">Rəsmi Mənbə</div>
+      <a href="../" class="back-link">&larr; Ana Səhifəyə Qayıt</a>
+      <button class="btn-print" onclick="window.print()">🖨️ Çap Versiyası</button>
     </div>
   </header>
 
   <div class="container">
-    <div class="search-card">
-      <div class="search-input-wrapper">
-        <input type="text" id="searchInput" onkeyup="filterDocs()" placeholder="Sənədin adı, rekvizitləri və ya tarixi üzrə axtarış...">
+    <main class="doc-paper">
+      <div id="documentContent">
+        <div class="status-msg">Sənəd verilməsi hazırlanır...</div>
       </div>
-    </div>
-
-    <div id="documentList" class="doc-list">
-      <div class="status-msg">Verilənlər bazası yüklənir...</div>
-    </div>
+    </main>
   </div>
 
   <script>
-    let allDocuments = [];
+    const urlParams = new URLSearchParams(window.location.search);
+    const docId = urlParams.get('id');
 
-    fetch('./documents.json')
-      .then(response => response.json())
-      .then(data => {
-        allDocuments = data;
-        renderDocuments(allDocuments);
-      })
-      .catch(error => {
-        document.getElementById('documentList').innerHTML = '<div class="status-msg" style="color:#dc2626;">Sənədlər yüklənərkən xəta baş verdi.</div>';
-      });
-
-    function renderDocuments(docs) {
-      const container = document.getElementById('documentList');
-      container.innerHTML = '';
-
-      if (docs.length === 0) {
-        container.innerHTML = '<div class="status-msg">Axtarışa uyğun heç bir rəsmi sənəd tapılmadı.</div>';
-        return;
-      }
-
-      docs.forEach(doc => {
-        const docUrl = `./framework/?id=${doc.id}`;
-        const docNo = doc.no ? `<span class="doc-badge">№ ${doc.no}</span>` : '';
-
-        const item = document.createElement('a');
-        item.href = docUrl;
-        item.className = 'doc-card';
-        item.innerHTML = `
-          <div class="doc-info">
-            <div class="doc-title">${doc.title}</div>
-            <div class="doc-meta">
-              ${docNo}
-              <span>Qəbul tarixi: ${doc.date}</span>
-            </div>
-          </div>
-          <div class="btn-view">Sənədi Aç &rarr;</div>
-        `;
-        container.appendChild(item);
-      });
+    if (!docId) {
+      document.getElementById('documentContent').innerHTML = '<div class="status-msg" style="color:#dc2626;">Sənəd reyestr nömrəsi (ID) qeyd edilməyib.</div>';
+    } else {
+      fetch('../documents.json')
+        .then(res => {
+          if (!res.ok) throw new Error('Fayl tapılmadı');
+          return res.json();
+        })
+        .then(data => {
+          const doc = data.find(d => String(d.id) === String(docId));
+          if (doc) {
+            renderDoc(doc);
+          } else {
+            document.getElementById('documentContent').innerHTML = `<div class="status-msg" style="color:#dc2626;">Reyestr id-si "${docId}" olan sənəd tapılmadı.</div>`;
+          }
+        })
+        .catch(err => {
+          document.getElementById('documentContent').innerHTML = '<div class="status-msg" style="color:#dc2626;">Sənəd yüklənərkən sistemsəl xəta baş verdi.</div>';
+        });
     }
 
-    function filterDocs() {
-      const query = document.getElementById('searchInput').value.toLowerCase().trim();
-      const filtered = allDocuments.filter(doc => {
-        return (doc.title && doc.title.toLowerCase().includes(query)) ||
-               (doc.no && doc.no.toLowerCase().includes(query)) ||
-               (doc.date && doc.date.toLowerCase().includes(query));
-      });
-      renderDocuments(filtered);
+    function renderDoc(doc) {
+      document.title = `${doc.title} | E-QANUN`;
+      const docNo = doc.no ? `<span class="doc-badge">№ ${doc.no}</span>` : '';
+
+      document.getElementById('documentContent').innerHTML = `
+        <div class="doc-header-block">
+          <div class="doc-emblem">Azərbaycan Respublikasının Qanunvericiliyi</div>
+          <h1 class="doc-title">${doc.title}</h1>
+          <div class="doc-meta-row">
+            ${docNo}
+            <span>Qəbul tarixi: <strong>${doc.date}</strong></span>
+          </div>
+        </div>
+        <div class="doc-body-text">
+          <p><strong>AZƏRBAYCAN RESPUBLİKASININ QANUNU</strong></p>
+          <p>Bu rəsmi sənədin tam mətni hüquqi aktlar reyestrinə uyğun olaraq nümayış etdirilir. ${doc.title} haqqında ətraflı maddələr və hüquqi norma müddəaları bu hissədə tənzimlənir.</p>
+        </div>
+      `;
     }
   </script>
+
 </body>
 </html>
