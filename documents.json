@@ -1,14 +1,30 @@
-[
-  {
-    "id": "1",
-    "no": "AK-102",
-    "title": "Azərbaycan Respublikasının Konstitusiyası",
-    "date": "12 noyabr 1995"
-  },
-  {
-    "id": "2",
-    "no": "№ 482",
-    "title": "R.A.Abbasovun 2-ci dərəcəli ordenlə təltif edilməsi haqqında",
-    "date": "22 iyul 2026"
+function renderDocuments(docs) {
+  const container = document.getElementById('documentList');
+  container.innerHTML = '';
+
+  if (docs.length === 0) {
+    container.innerHTML = '<div class="status-msg">Heç bir sənəd tapılmadı.</div>';
+    return;
   }
-]
+
+  docs.forEach(doc => {
+    // framework qovluğundakı tək index.html-ə ID parametri ilə keçid
+    const docUrl = `./framework/?id=${doc.id}`;
+    const docNo = doc.no ? `<span class="doc-badge">№ ${doc.no}</span>` : '';
+
+    const item = document.createElement('a');
+    item.href = docUrl;
+    item.className = 'doc-card';
+    item.innerHTML = `
+      <div class="doc-info">
+        <div class="doc-title">${doc.title}</div>
+        <div class="doc-meta">
+          ${docNo}
+          <span>Qəbul tarixi: ${doc.date}</span>
+        </div>
+      </div>
+      <div class="btn-view">Sənədə Bax &rarr;</div>
+    `;
+    container.appendChild(item);
+  });
+}
