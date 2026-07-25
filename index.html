@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hüquqi Aktlar Portalı</title>
+  <!-- Google Fonts: Inter Şrifti -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-hover: #1d4ed8;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    /* Yuxarı Header */
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: #fff;
+      padding: 45px 20px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: #94a3b8;
+      font-size: 15px;
+    }
+
+    /* Əsas Konteyner */
+    .container {
+      max-width: 850px;
+      margin: -25px auto 50px auto;
+      padding: 0 20px;
+    }
+
+    /* Axtarış Bölməsi */
+    .search-card {
+      background: var(--card-bg);
+      padding: 8px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border-color);
+      margin-bottom: 30px;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      width: 20px;
+      height: 20px;
+      fill: var(--text-muted);
+    }
+
+    .search-input-wrapper input {
+      width: 100%;
+      padding: 14px 16px 14px 48px;
+      font-size: 16px;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      outline: none;
+      font-family: inherit;
+      transition: all 0.2s ease;
+      background-color: transparent;
+    }
+
+    .search-input-wrapper input:focus {
+      background-color: #fff;
+      border-color: var(--primary);
+    }
+
+    /* Sənəd Kartları */
+    .doc-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .doc-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .doc-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.06);
+      border-color: #cbd5e1;
+    }
+
+    .doc-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 20px;
+    }
+
+    .doc-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      transition: color 0.2s;
+    }
+
+    .doc-card:hover .doc-title {
+      color: var(--primary);
+    }
+
+    /* Meta Məlumatlar (№ və Tarix) */
+    .doc-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+    }
+
+    .doc-badge {
+      background-color: #f1f5f9;
+      color: var(--primary);
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .doc-date {
+      display: flex;
+      align-items: center;
+    }
+
+    /* Düymə Style-ı */
+    .btn-view {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #eff6ff;
+      color: var(--primary);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .doc-card:hover .btn-view {
+      background-color: var(--primary);
+      color: #fff;
+    }
+
+    /* Xəbərdarlıq və Yüklənmə */
+    .status-msg {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+
+    @media (max-width: 640px) {
+      .doc-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .btn-view {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Qanunvericilik Bazası</h1>
+    <p>Azərbaycan Respublikasının rəsmi hüquqi aktlar portalı</p>
+  </header>
+
+  <div class="container">
+    
+    <!-- Axtarış Kartı -->
+    <div class="search-card">
+      <div class="search-input-wrapper">
+        <svg class="search-icon" viewBox="0 0 24 24">
+          <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <input type="text" id="searchInput" onkeyup="filterDocs()" placeholder="Sənədin adı, nömrəsi və ya tarixi ilə axtarın...">
+      </div>
+    </div>
+
+    <!-- Sənəd Siyahısı -->
+    <div id="documentList" class="doc-list">
+      <div class="status-msg">Sənədlər yüklənir...</div>
+    </div>
+
+  </div>
+
+  <script>
+    let allDocuments = [];
+
+    fetch('documents.json')
+      .then(response => response.json())
+      .then(data => {
+        allDocuments = data;
+        renderDocuments(allDocuments);
+      })
+      .catch(error => {
+        document.getElementById('documentList').innerHTML = '<div class="status-msg" style="color:#ef4444;">Sənədlər yüklənərkən xəta baş verdi.</div>';
+        console.error('Xəta:', error);
+      });
+
+    function renderDocuments(docs) {
+      const container = document.getElementById('documentList');
+      container.innerHTML = '';
+
+      if (docs.length === 0) {
+        container.innerHTML = '<div class="status-msg">Axtarışa uyğun heç bir sənəd tapılmadı.</div>';
+        return;
+      }
+
+      docs.forEach(doc => {
+        const docUrl = `framework/${doc.id}`;
+        const docNo = doc.no ? `<span class="doc-badge">№ ${doc.no}</span>` : '';
+
+        const item = document.createElement('a');
+        item.href = docUrl;
+        item.className = 'doc-card';
+        item.innerHTML = `
+          <div class="doc-info">
+            <div class="doc-title">${doc.title}</div>
+            <div class="doc-meta">
+              ${docNo}
+              <span class="doc-date">Qəbul tarixi: ${doc.date}</span>
+            </div>
+          </div>
+          <div class="btn-view">Sənədə Bax &rarr;</div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    // Axtarış funksiyası (artıq həm adda, həm nömrədə, həm də tarixdə axtarır)
+    function filterDocs() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allDocuments.filter(doc => {
+        const titleMatch = doc.title.toLowerCase().includes(query);
+        const noMatch = doc.no ? doc.no.toLowerCase().includes(query) : false;
+        const dateMatch = doc.date ? doc.date.toLowerCase().includes(query) : false;
+        return titleMatch || noMatch || dateMatch;
+      });
+      renderDocuments(filtered);
+    }
+  </script>
+
+</body>
+</html>
