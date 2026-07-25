@@ -1,95 +1,42 @@
-<!DOCTYPE html>
-<html lang="az">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sənədə Baxış</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #1e3a8a;
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+<script>
+  // 1.html faylı üçün sənəd ID-si dəqiq "1"-dir
+  const docId = "1"; 
+
+  // JSON faylı bir mərtəbə yuxarıda (root-da) yerləşir
+  fetch('../documents.json')
+    .then(response => {
+      if (!response.ok) throw new Error('documents.json tapılmadı');
+      return response.json();
+    })
+    .then(data => {
+      const doc = data.find(d => String(d.id) === docId);
+      if (doc) {
+        renderDoc(doc);
+      } else {
+        document.getElementById('documentContent').innerHTML = '<div class="status-msg" style="color:#ef4444;">Sənəd məlumatı tapılmadı.</div>';
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('documentContent').innerHTML = '<div class="status-msg" style="color:#ef4444;">Sənəd yüklənərkən xəta baş verdi.</div>';
+    });
+
+  function renderDoc(doc) {
+    document.title = doc.title;
+    const docNo = doc.no ? `<span class="badge">№ ${doc.no}</span>` : '';
     
-    .nav-bar { background: #fff; border-bottom: 1px solid var(--border-color); padding: 15px 20px; }
-    .nav-container { max-width: 900px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-    
-    .back-link { text-decoration: none; color: var(--primary); font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
-    .back-link:hover { text-decoration: underline; }
-
-    .a4-container { max-width: 900px; margin: 30px auto; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 40px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
-    .doc-header { border-bottom: 2px solid var(--border-color); padding-bottom: 20px; margin-bottom: 25px; }
-    .doc-title { font-size: 22px; font-weight: 700; color: var(--text-main); margin-bottom: 12px; }
-    .doc-meta-bar { display: flex; gap: 12px; font-size: 14px; color: var(--text-muted); align-items: center; }
-    .badge { background: #eff6ff; color: var(--primary); padding: 4px 10px; border-radius: 6px; font-weight: 600; font-size: 13px; }
-    .doc-body { font-size: 16px; color: #334155; line-height: 1.8; }
-    .status-msg { text-align: center; padding: 40px; color: var(--text-muted); }
-  </style>
-</head>
-<body>
-
-  <div class="nav-bar">
-    <div class="nav-container">
-      <!-- 1 mərtəbə yuxarı (ana səhifəyə) qayıdır -->
-      <a href="../" class="back-link">&larr; Ana səhifəyə qayıt</a>
-    </div>
-  </div>
-
-  <div class="a4-container">
-    <div id="documentContent">
-      <div class="status-msg">Sənəd yüklənir...</div>
-    </div>
-  </div>
-
-  <script>
-    // Faylın adından ID-ni götürürük (məsələn: ".../framework/1.html" -> "1")
-    const fileName = window.location.pathname.split('/').pop(); // "1.html"
-    const docId = fileName.replace('.html', ''); // "1"
-
-    // 1 mərtəbə yuxarı qalxıb documents.json faylını çəkir
-    fetch('../documents.json')
-      .then(response => {
-        if (!response.ok) throw new Error('documents.json tapılmadı');
-        return response.json();
-      })
-      .then(data => {
-        const doc = data.find(d => String(d.id) === String(docId));
-        if (doc) {
-          renderDoc(doc);
-        } else {
-          document.getElementById('documentContent').innerHTML = `<div class="status-msg" style="color:#ef4444;">ID-si "${docId}" olan sənəd tapılmadı.</div>`;
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        document.getElementById('documentContent').innerHTML = '<div class="status-msg" style="color:#ef4444;">Sənəd yüklənərkən xəta baş verdi.</div>';
-      });
-
-    function renderDoc(doc) {
-      document.title = doc.title;
-      const docNo = doc.no ? `<span class="badge">№ ${doc.no}</span>` : '';
-      
-      document.getElementById('documentContent').innerHTML = `
-        <div class="doc-header">
-          <h1 class="doc-title">${doc.title}</h1>
-          <div class="doc-meta-bar">
-            ${docNo}
-            <span>Qəbul tarixi: ${doc.date}</span>
-          </div>
+    document.getElementById('documentContent').innerHTML = `
+      <div class="doc-header">
+        <h1 class="doc-title">${doc.title}</h1>
+        <div class="doc-meta-bar">
+          ${docNo}
+          <span>Qəbul tarixi: ${doc.date}</span>
         </div>
-        <div class="doc-body">
-          <p style="margin-bottom: 15px;"><strong>AZƏRBAYCAN RESPUBLİKASININ QANUNU</strong></p>
-          <p>Bu hissədə sənədin tam mətni nümayiş olunur. ${doc.title} haqqında ətraflı məlumatlar buraya daxil edilə bilər.</p>
-        </div>
-      `;
-    }
-  </script>
-
-</body>
-</html>
+      </div>
+      <div class="doc-body">
+        <p style="margin-bottom: 15px;"><strong>AZƏRBAYCAN RESPUBLİKASININ QANUNU</strong></p>
+        <p>Bu hissədə sənədin tam mətni nümayiş olunur. ${doc.title} haqqında ətraflı məlumatlar buraya daxil edilə bilər.</p>
+      </div>
+    `;
+  }
+</script>
