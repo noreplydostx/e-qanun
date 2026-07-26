@@ -74,52 +74,49 @@
   </div>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const docId = urlParams.get('id');
-
-    // Məlumatları təhlükəsiz massivdən oxuyuruq
-    const defaultDocs = [
-      {
-        id: "1",
+    // Bütün sənədlərin mətnləri
+    const documentsData = {
+      "1": {
         no: "AK-102",
         title: "Azərbaycan Respublikasının Konstitusiyası",
         date: "12 noyabr 1995",
         content: "Azərbaycan xalqı öz çoxəsrlik dövlətçilik ənənələrini davam etdirərək, bütün cəmiyyətin və hər kəsin rifahının təmin edilməsini istəyərək, ədalətin, azadlığın və təhlükəsizliyin bərqərar edilməsini arzulayaraq bu Konstitusiyanı qəbul edir."
       },
-      {
-        id: "2",
+      "2": {
         no: "482",
         title: "R.A.Abbasovun 2-ci dərəcəli ordenlə təltif edilməsi haqqında",
         date: "22 iyul 2026",
         content: "Azərbaycan Respublikasında dövlət qulluğunda səmərəli fəaliyyətinə görə Rəşad Adil oğlu Abbasov 2-ci dərəcəli 'Vətənə xidmətə görə' ordeni ilə təltif edilsin."
       }
-    ];
+    };
 
-    const storedDocs = JSON.parse(localStorage.getItem('eqanun_docs')) || defaultDocs;
-    const doc = storedDocs.find(d => String(d.id) === String(docId));
+    const urlParams = new URLSearchParams(window.location.search);
+    const docId = urlParams.get('id');
+    const doc = documentsData[docId];
+
+    const contentDiv = document.getElementById('documentContent');
 
     if (!docId) {
-      document.getElementById('documentContent').innerHTML = '<div class="status-msg" style="color:#dc2626;">Sənəd reyestr nömrəsi (ID) seçilməyib.</div>';
+      contentDiv.innerHTML = '<div class="status-msg" style="color:#dc2626;">Sənəd reyestr nömrəsi daxil edilməyib.</div>';
     } else if (doc) {
-      document.title = `${doc.title} | E-QANUN`;
-      const docNo = doc.no ? `<span class="doc-badge">№ ${doc.no}</span>` : '';
+      document.title = doc.title + ' | E-QANUN';
+      const docNo = doc.no ? '<span class="doc-badge">№ ' + doc.no + '</span>' : '';
 
-      document.getElementById('documentContent').innerHTML = `
-        <div class="doc-header-block">
-          <div class="doc-emblem">Azərbaycan Respublikasının Qanunvericiliyi</div>
-          <h1 class="doc-title">${doc.title}</h1>
-          <div class="doc-meta-row">
-            ${docNo}
-            <span>Qəbul tarixi: <strong>${doc.date}</strong></span>
-          </div>
-        </div>
-        <div class="doc-body-text">
-          <p><strong>AZƏRBAYCAN RESPUBLİKASININ QANUNU</strong></p>
-          <p>${doc.content}</p>
-        </div>
-      `;
+      contentDiv.innerHTML = 
+        '<div class="doc-header-block">' +
+          '<div class="doc-emblem">Azərbaycan Respublikasının Qanunvericiliyi</div>' +
+          '<h1 class="doc-title">' + doc.title + '</h1>' +
+          '<div class="doc-meta-row">' +
+            docNo +
+            '<span>Qəbul tarixi: <strong>' + doc.date + '</strong></span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="doc-body-text">' +
+          '<p><strong>AZƏRBAYCAN RESPUBLİKASININ QANUNU</strong></p>' +
+          '<p>' + doc.content + '</p>' +
+        '</div>';
     } else {
-      document.getElementById('documentContent').innerHTML = `<div class="status-msg" style="color:#dc2626;">ID: "${docId}" olan sənəd tapılmadı.</div>`;
+      contentDiv.innerHTML = '<div class="status-msg" style="color:#dc2626;">ID: "' + docId + '" olan sənəd tapılmadı.</div>';
     }
   </script>
 
