@@ -75,7 +75,7 @@
   <div class="container">
     <div class="search-card">
       <div class="search-input-wrapper">
-        <input type="text" id="searchInput" onkeyup="filterDocs()" placeholder="Sənədin adı, rekvizitləri və ya tarixi üzrə axtarış...">
+        <input type="text" id="searchInput" placeholder="Sənədin adı, rekvizitləri və ya tarixi üzrə axtarış...">
       </div>
     </div>
 
@@ -83,68 +83,63 @@
   </div>
 
   <script>
-    // Bütün sənəd verilənləri birbaşa JS daxilindədir (CORS xətası olmayaçaq!)
+    // Birbaşa verilənlər bazası (Səhifə açılan kimi anında işləyəcək)
     const allDocuments = [
       {
         id: "1",
         no: "AK-102",
         title: "Azərbaycan Respublikasının Konstitusiyası",
-        date: "12 noyabr 1995",
-        content: "Azərbaycan xalqı öz çoxəsrlik dövlətçilik ənənələrini davam etdirərək, bütün cəmiyyətin və hər kəsin rifahının təmin edilməsini istəyərək, ədalətin, azadlığın və təhlükəsizliyin bərqərar edilməsini arzulayaraq bu Konstitusiyanı qəbul edir."
+        date: "12 noyabr 1995"
       },
       {
         id: "2",
         no: "482",
         title: "R.A.Abbasovun 2-ci dərəcəli ordenlə təltif edilməsi haqqında",
-        date: "22 iyul 2026",
-        content: "Azərbaycan Respublikasında dövlət qulluğunda səmərəli fəaliyyətinə görə Rəşad Adil oğlu Abbasov 2-ci dərəcəli 'Vətənə xidmətə görə' ordeni ilə təltif edilsin."
+        date: "22 iyul 2026"
       }
     ];
-
-    // Məlumatları JS daxilində saxlayırıq ki, sənəd səhifəsi də oxuya bilsin
-    localStorage.setItem('eqanun_docs', JSON.stringify(allDocuments));
 
     function renderDocuments(docs) {
       const container = document.getElementById('documentList');
       container.innerHTML = '';
 
-      if (docs.length === 0) {
+      if (!docs || docs.length === 0) {
         container.innerHTML = '<div class="status-msg">Axtarışa uyğun heç bir rəsmi sənəd tapılmadı.</div>';
         return;
       }
 
-      docs.forEach(doc => {
-        const docUrl = `framework/?id=${doc.id}`;
-        const docNo = doc.no ? `<span class="doc-badge">№ ${doc.no}</span>` : '';
+      docs.forEach(function(doc) {
+        const docUrl = 'framework/?id=' + encodeURIComponent(doc.id);
+        const docNo = doc.no ? '<span class="doc-badge">№ ' + doc.no + '</span>' : '';
 
         const item = document.createElement('a');
         item.href = docUrl;
         item.className = 'doc-card';
-        item.innerHTML = `
-          <div class="doc-info">
-            <div class="doc-title">${doc.title}</div>
-            <div class="doc-meta">
-              ${docNo}
-              <span>Qəbul tarixi: ${doc.date}</span>
-            </div>
-          </div>
-          <div class="btn-view">Sənədi Aç &rarr;</div>
-        `;
+        item.innerHTML = 
+          '<div class="doc-info">' +
+            '<div class="doc-title">' + doc.title + '</div>' +
+            '<div class="doc-meta">' +
+              docNo +
+              '<span>Qəbul tarixi: ' + doc.date + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="btn-view">Sənədi Aç &rarr;</div>';
+
         container.appendChild(item);
       });
     }
 
-    function filterDocs() {
-      const query = document.getElementById('searchInput').value.toLowerCase().trim();
-      const filtered = allDocuments.filter(doc => {
-        return (doc.title && doc.title.toLowerCase().includes(query)) ||
-               (doc.no && doc.no.toLowerCase().includes(query)) ||
-               (doc.date && doc.date.toLowerCase().includes(query));
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const query = this.value.toLowerCase().trim();
+      const filtered = allDocuments.filter(function(doc) {
+        return (doc.title && doc.title.toLowerCase().indexOf(query) !== -1) ||
+               (doc.no && doc.no.toLowerCase().indexOf(query) !== -1) ||
+               (doc.date && doc.date.toLowerCase().indexOf(query) !== -1);
       });
       renderDocuments(filtered);
-    }
+    });
 
-    // Başlanğıc yüklənmə
+    // Əməliyyat dərhal icra edilir
     renderDocuments(allDocuments);
   </script>
 </body>
