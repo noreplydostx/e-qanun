@@ -4,66 +4,170 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sənədə Baxış | E-QANUN</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --gov-navy: #0a192f;
-      --gov-blue: #1e40af;
-      --gov-light-blue: #eff6ff;
-      --bg-color: #f1f5f9;
-      --card-bg: #ffffff;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --surface: #ffffff;
       --text-main: #0f172a;
-      --text-muted: #475569;
-      --border-color: #cbd5e1;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 20px;
+      --shadow-md: 0 12px 32px -4px rgba(15, 23, 42, 0.05);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; }
+    body { 
+      font-family: 'Plus Jakarta Sans', sans-serif; 
+      background-color: var(--bg); 
+      color: var(--text-main); 
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
 
-    .gov-top-bar { background: #020617; color: #94a3b8; font-size: 12px; padding: 6px 20px; font-weight: 500; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1e293b; }
-    .gov-flag-text { display: flex; align-items: center; gap: 8px; }
-    .gov-flag-icon { width: 14px; height: 10px; background: linear-gradient(to bottom, #00bfff 33.3%, #ff0000 33.3%, #ff0000 66.6%, #008000 66.6%); border-radius: 1px; display: inline-block; }
+    /* Top Navigation Header */
+    header {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 16px 24px;
+    }
 
-    header { background: var(--gov-navy); border-bottom: 3px solid var(--gov-blue); padding: 14px 20px; }
-    .header-container { max-width: 950px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-    
-    .back-btn { text-decoration: none; color: #f8fafc; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(255,255,255,0.08); border-radius: 6px; border: 1px solid rgba(255,255,255,0.15); transition: all 0.2s; }
-    .back-btn:hover { background: rgba(255,255,255,0.18); }
+    .nav-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-    .btn-print { background: var(--gov-blue); color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-    .btn-print:hover { background: #1d4ed8; }
+    .back-btn {
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 14px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      transition: all 0.2s;
+    }
 
-    .container { max-width: 950px; margin: 30px auto 60px auto; padding: 0 20px; }
+    .back-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateX(-2px);
+    }
 
-    .doc-paper { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 8px; padding: 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
-    
-    .doc-header-block { border-bottom: 2px solid #e2e8f0; padding-bottom: 24px; margin-bottom: 30px; text-align: center; }
-    .doc-emblem { font-size: 12px; font-weight: 700; color: var(--gov-blue); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
-    .doc-title { font-size: 22px; font-weight: 700; color: var(--gov-navy); line-height: 1.4; margin-bottom: 16px; }
-    
-    .doc-meta-row { display: flex; justify-content: center; align-items: center; gap: 16px; font-size: 13px; color: var(--text-muted); }
-    .doc-badge { background: var(--gov-light-blue); color: var(--gov-blue); font-weight: 600; padding: 3px 10px; border-radius: 4px; border: 1px solid #bfdbfe; }
+    .back-btn svg {
+      width: 16px;
+      height: 16px;
+    }
 
-    .doc-body-text { font-size: 15px; color: #1e293b; line-height: 1.8; text-align: justify; }
-    .doc-body-text p { margin-bottom: 16px; }
+    /* Document Layout */
+    .container {
+      max-width: 900px;
+      margin: 40px auto 80px auto;
+      padding: 0 20px;
+    }
 
-    .status-msg { text-align: center; padding: 60px; color: var(--text-muted); }
+    .doc-paper {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 56px 64px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .doc-header {
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 32px;
+      margin-bottom: 36px;
+      text-align: center;
+    }
+
+    .doc-type-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary);
+      background: #eff6ff;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .doc-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.35;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .doc-meta {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .doc-badge {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .doc-body {
+      font-size: 16px;
+      color: #334155;
+      line-height: 1.85;
+      text-align: justify;
+    }
+
+    .doc-body p {
+      margin-bottom: 20px;
+    }
+
+    .status-msg {
+      text-align: center;
+      padding: 60px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 640px) {
+      .doc-paper { padding: 32px 24px; }
+      .doc-title { font-size: 20px; }
+    }
   </style>
 </head>
 <body>
 
-  <div class="gov-top-bar">
-    <div class="gov-flag-text">
-      <span class="gov-flag-icon"></span>
-      <span>AZƏRBAYCAN RESPUBLİKASININ RƏSMİ HÜQUQİ PORTALI</span>
-    </div>
-    <span>E-QANUN SƏNƏD REYESTRİ</span>
-  </div>
-
   <header>
-    <div class="header-container">
-      <a href="../" class="back-btn">&larr; Ana Səhifəyə Qayıt</a>
-      <button class="btn-print" onclick="window.print()">🖨️ Çap Versiyası</button>
+    <div class="nav-container">
+      <a href="../" class="back-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Ana səhifəyə qayıt
+      </a>
     </div>
   </header>
 
@@ -74,7 +178,6 @@
   </div>
 
   <script>
-    // Bütün sənədlərin mətnləri
     const documentsData = {
       "1": {
         no: "AK-102",
@@ -97,26 +200,29 @@
     const contentDiv = document.getElementById('documentContent');
 
     if (!docId) {
-      contentDiv.innerHTML = '<div class="status-msg" style="color:#dc2626;">Sənəd reyestr nömrəsi daxil edilməyib.</div>';
+      contentDiv.innerHTML = '<div class="status-msg" style="color:#ef4444;">Sənəd nömrəsi təyin edilməyib.</div>';
     } else if (doc) {
       document.title = doc.title + ' | E-QANUN';
       const docNo = doc.no ? '<span class="doc-badge">№ ' + doc.no + '</span>' : '';
 
       contentDiv.innerHTML = 
-        '<div class="doc-header-block">' +
-          '<div class="doc-emblem">Azərbaycan Respublikasının Qanunvericiliyi</div>' +
+        '<div class="doc-header">' +
+          '<div class="doc-type-tag">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>' +
+            'Rəsmi Qanunvericilik Aktı' +
+          '</div>' +
           '<h1 class="doc-title">' + doc.title + '</h1>' +
-          '<div class="doc-meta-row">' +
+          '<div class="doc-meta">' +
             docNo +
             '<span>Qəbul tarixi: <strong>' + doc.date + '</strong></span>' +
           '</div>' +
         '</div>' +
-        '<div class="doc-body-text">' +
+        '<div class="doc-body">' +
           '<p><strong>AZƏRBAYCAN RESPUBLİKASININ QANUNU</strong></p>' +
           '<p>' + doc.content + '</p>' +
         '</div>';
     } else {
-      contentDiv.innerHTML = '<div class="status-msg" style="color:#dc2626;">ID: "' + docId + '" olan sənəd tapılmadı.</div>';
+      contentDiv.innerHTML = '<div class="status-msg" style="color:#ef4444;">Daxil edilən ID üzrə sənəd tapılmadı.</div>';
     }
   </script>
 
