@@ -16,6 +16,8 @@
       --text-primary: #0f172a;
       --text-secondary: #64748b;
       --accent: #2563eb;
+      --badge-bg: #eff6ff;
+      --badge-text: #2563eb;
     }
 
     [data-theme="dark"] {
@@ -26,6 +28,8 @@
       --text-primary: #f8fafc;
       --text-secondary: #94a3b8;
       --accent: #3b82f6;
+      --badge-bg: rgba(59, 130, 246, 0.1);
+      --badge-text: #60a5fa;
     }
 
     * {
@@ -108,13 +112,29 @@
       border-bottom: 1px solid var(--border);
     }
 
+    .doc-meta-top {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
     .doc-authority {
       font-size: 12px;
       font-weight: 700;
       color: var(--accent);
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 14px;
+    }
+
+    .doc-badge {
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
     }
 
     .doc-title {
@@ -254,6 +274,8 @@
       if (currentDoc) {
         document.title = currentDoc.title + " | E-QANUN";
         
+        var docNoHtml = currentDoc.no ? '<span class="doc-badge">№ ' + currentDoc.no + '</span>' : '';
+        
         var paragraphsHtml = '';
         if (currentDoc.paragraphs) {
           for (var j = 0; j < currentDoc.paragraphs.length; j++) {
@@ -263,7 +285,10 @@
 
         container.innerHTML = 
           '<div class="doc-header">' +
-            '<div class="doc-authority">' + (currentDoc.authority || '') + '</div>' +
+            '<div class="doc-meta-top">' +
+              '<div class="doc-authority">' + (currentDoc.authority || '') + '</div>' +
+              docNoHtml +
+            '</div>' +
             '<h1 class="doc-title">' + currentDoc.title + '</h1>' +
           '</div>' +
           '<div class="doc-body">' + paragraphsHtml + '</div>' +
