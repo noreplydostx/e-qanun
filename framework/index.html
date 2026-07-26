@@ -81,52 +81,56 @@
   </div>
 
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const docId = urlParams.get('id');
+  const urlParams = new URLSearchParams(window.location.search);
+  const docId = urlParams.get('id');
 
-    if (!docId) {
-      document.getElementById('documentContent').innerHTML = '<div class="status-msg" style="color:#dc2626;">Sənəd reyestr nömrəsi (ID) daxil edilməyib.</div>';
-    } else {
-      // Çoxlu yoxlama: həm nisbi path dənəyir, tapmasa alt qovluğa keçir
-      fetch('../documents.json')
-        .then(res => {
-          if (!res.ok) return fetch('/documents.json');
-          return res;
-        })
-        .then(res => res.json())
-        .then(data => {
-          const doc = data.find(d => String(d.id) === String(docId));
-          if (doc) {
-            renderDoc(doc);
-          } else {
-            document.getElementById('documentContent').innerHTML = `<div class="status-msg" style="color:#dc2626;">ID-si "${docId}" olan sənəd tapılmadı.</div>`;
-          }
-        })
-        .catch(err => {
-          document.getElementById('documentContent').innerHTML = '<div class="status-msg" style="color:#dc2626;">Sənəd yüklənərkən xəta baş verdi. documents.json faylı tapılmadı.</div>';
-        });
-    }
+  if (!docId) {
+    document.getElementById('documentContent').innerHTML = 
+      '<div class="status-msg" style="color:#dc2626;">Sənəd reyestr nömrəsi (ID) daxil edilməyib.</div>';
+  } else {
+    // Bir üst qovluqdakı documents.json faylının dəqiq URL-ni çıxarır
+    const jsonPath = new URL('../documents.json', window.location.href).href;
 
-    function renderDoc(doc) {
-      document.title = `${doc.title} | E-QANUN`;
-      const docNo = doc.no ? `<span class="doc-badge">№ ${doc.no}</span>` : '';
+    fetch(jsonPath)
+      .then(res => {
+        if (!res.ok) throw new Error('HTTP xətası! Status: ' + res.status);
+        return res.json();
+      })
+      .then(data => {
+        const doc = data.find(d => String(d.id) === String(docId));
+        if (doc) {
+          renderDoc(doc);
+        } else {
+          document.getElementById('documentContent').innerHTML = 
+            `<div class="status-msg" style="color:#dc2626;">ID-si "${docId}" olan sənəd tapılmadı.</div>`;
+        }
+      })
+      .catch(err => {
+        console.error('Yükləmə xətası:', err);
+        document.getElementById('documentContent').innerHTML = 
+          '<div class="status-msg" style="color:#dc2626;">Sənəd yüklənərkən xəta baş verdi. <b>documents.json</b> faylı tapılmadı.</div>';
+      });
+  }
 
-      document.getElementById('documentContent').innerHTML = `
-        <div class="doc-header-block">
-          <div class="doc-emblem">Azərbaycan Respublikasının Qanunvericiliyi</div>
-          <h1 class="doc-title">${doc.title}</h1>
-          <div class="doc-meta-row">
-            ${docNo}
-            <span>Qəbul tarixi: <strong>${doc.date}</strong></span>
-          </div>
+  function renderDoc(doc) {
+    document.title = `${doc.title} | E-QANUN`;
+    const docNo = doc.no ? `<span class="doc-badge">№ ${doc.no}</span>` : '';
+
+    document.getElementById('documentContent').innerHTML = `
+      <div class="doc-header-block">
+        <div class="doc-emblem">Azərbaycan Respublikasının Qanunvericiliyi</div>
+        <h1 class="doc-title">${doc.title}</h1>
+        <div class="doc-meta-row">
+          ${docNo}
+          <span>Qəbul tarixi: <strong>${doc.date}</strong></span>
         </div>
-        <div class="doc-body-text">
-          <p><strong>AZƏRBAYCAN RESPUBLİKASININ QANUNU</strong></p>
-          <p>Bu rəsmi sənədin tam mətni hüquqi aktlar reyestrinə uyğun olaraq nümayış etdirilir. ${doc.title} haqqında ətraflı maddələr və hüquqi norma müddəaları bu hissədə tənzimlənir.</p>
-        </div>
-      `;
-    }
-  </script>
-
+      </div>
+      <div class="doc-body-text">
+        <p><strong>AZƏRBAYCAN RESPUBLİKASININ QANUNU</strong></p>
+        <p>Bu rəsmi sənədin tam mətni hüquqi aktlar reyestrinə uyğun olaraq nümayış etdirilir. ${doc.title} haqqında ətraflı maddələr və hüquqi norma müddəaları bu hissədə tənzimlənir.</p>
+      </div>
+    `;
+  }
+</script>
 </body>
 </html>
