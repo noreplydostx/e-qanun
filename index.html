@@ -3,112 +3,217 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-QANUN | Rəsmi Sənədlər Portal</title>
+  <title>E-QANUN | Hüquqi Aktların Vahid Portalı</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-color: #f8fafc;
-      --card-bg: #ffffff;
-      --text-main: #0f172a;
-      --text-muted: #64748b;
-      --primary: #2563eb;
-      --border-color: #e2e8f0;
+      --bg: #090d16;
+      --surface: #111827;
+      --surface-hover: #1f2937;
+      --border: #1e293b;
+      --border-focus: #3b82f6;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.15);
+      --badge-bg: rgba(59, 130, 246, 0.1);
+      --badge-text: #60a5fa;
     }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
+
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: 40px 20px;
+      padding: 0;
     }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
     }
-    h1 {
-      font-size: 24px;
-      margin-bottom: 20px;
+
+    .wrapper {
+      width: 100%;
+      max-width: 840px;
+    }
+
+    .header-section {
       text-align: center;
+      margin-bottom: 40px;
     }
+
+    .portal-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      background: var(--badge-bg);
+      color: var(--accent);
+      border-radius: 16px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      background: linear-gradient(to right, #fff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    .search-container {
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+    }
+
     .search-box {
       width: 100%;
-      padding: 14px 18px;
-      font-size: 16px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
+      padding: 16px 20px 16px 52px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      border-radius: 14px;
       outline: none;
-      background: var(--card-bg);
-      box-sizing: border-box;
-      margin-bottom: 24px;
-      transition: border-color 0.2s;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
+
     .search-box:focus {
-      border-color: var(--primary);
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 4px var(--accent-glow);
     }
+
     .doc-list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     }
+
     .doc-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      padding: 16px 20px;
-      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
       text-decoration: none;
       color: inherit;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: all 0.2s;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
+
     .doc-card:hover {
-      border-color: var(--primary);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.05);
+      background: var(--surface-hover);
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
     }
-    .doc-main {
+
+    .doc-content {
       display: flex;
-      gap: 16px;
+      gap: 18px;
       align-items: flex-start;
     }
-    .doc-index {
-      font-weight: 600;
-      color: var(--text-muted);
-      min-width: 24px;
+
+    .doc-icon-wrapper {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 10px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+
     .doc-title {
       font-size: 15px;
-      font-weight: 500;
-      margin-bottom: 6px;
-    }
-    .doc-meta {
-      font-size: 13px;
-      color: var(--text-muted);
-      display: flex;
-      gap: 12px;
-      align-items: center;
-    }
-    .doc-badge {
-      background: #eff6ff;
-      color: var(--primary);
-      padding: 2px 8px;
-      border-radius: 4px;
       font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: 8px;
+      color: var(--text-primary);
     }
-    .btn-arrow {
-      color: var(--text-muted);
+
+    .doc-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--text-secondary);
     }
+
+    .doc-badge {
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .arrow-icon {
+      color: var(--text-secondary);
+      transition: transform 0.2s ease;
+    }
+
+    .doc-card:hover .arrow-icon {
+      transform: translateX(4px);
+      color: var(--accent);
+    }
+
     .status-msg {
       text-align: center;
-      padding: 40px;
-      color: var(--text-muted);
+      padding: 60px;
+      color: var(--text-secondary);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>E-QANUN Portalı</h1>
-    <input type="text" id="searchInput" class="search-box" placeholder="Sənəd adı, nömrəsi və ya tarixinə görə axtar...">
+  <div class="wrapper">
+    <div class="header-section">
+      <div class="portal-logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      </div>
+      <h1>E-QANUN Portalı</h1>
+      <p class="subtitle">Rəsmi normativ hüquqi aktların vahid elektron bazası</p>
+    </div>
+
+    <div class="search-container">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="searchInput" class="search-box" placeholder="Sənəd adı, nömrəsi və ya açar sözlə axtarın...">
+    </div>
+
     <div id="documentList" class="doc-list"></div>
   </div>
 
@@ -136,14 +241,18 @@
           a.href = docUrl;
           a.className = 'doc-card';
           a.innerHTML = 
-            '<div class="doc-main">' +
-              '<div class="doc-index">' + (i + 1) + '</div>' +
+            '<div class="doc-content">' +
+              '<div class="doc-icon-wrapper">' +
+                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-0-5H20"></path></svg>' +
+              '</div>' +
               '<div>' +
                 '<div class="doc-title">' + doc.title + '</div>' +
-                '<div class="doc-meta">' + docNo + '<span>Tarix: ' + doc.date + '</span></div>' +
+                '<div class="doc-meta">' + docNo + '<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px; margin-right:4px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> ' + doc.date + '</span></div>' +
               '</div>' +
             '</div>' +
-            '<div class="btn-arrow">➔</div>';
+            '<div class="arrow-icon">' +
+              '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' +
+            '</div>';
 
           container.appendChild(a);
         }
