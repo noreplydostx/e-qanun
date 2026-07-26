@@ -9,9 +9,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --border-focus: #2563eb;
+      --text-primary: #0f172a;
+      --text-secondary: #64748b;
+      --accent: #2563eb;
+    }
+
+    [data-theme="dark"] {
       --bg: #090d16;
       --surface: #111827;
       --border: #1e293b;
+      --border-focus: #3b82f6;
       --text-primary: #f8fafc;
       --text-secondary: #94a3b8;
       --accent: #3b82f6;
@@ -32,18 +43,26 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     .wrapper {
       width: 100%;
       max-width: 800px;
+      position: relative;
+    }
+
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
     }
 
     .back-btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 24px;
       color: var(--text-secondary);
       text-decoration: none;
       font-weight: 500;
@@ -55,12 +74,31 @@
       color: var(--accent);
     }
 
+    .theme-toggle {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--border-focus);
+    }
+
     .doc-container {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 48px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      transition: background-color 0.3s, border-color 0.3s;
     }
 
     .doc-header {
@@ -89,7 +127,8 @@
     .doc-body {
       font-size: 15px;
       line-height: 1.9;
-      color: #cbd5e1;
+      color: var(--text-primary);
+      opacity: 0.9;
       margin-bottom: 50px;
     }
 
@@ -139,20 +178,57 @@
       font-weight: 500;
     }
   </style>
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('theme');
+      if (!savedTheme) {
+        savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
 </head>
 <body>
 
   <div class="wrapper">
-    <a href="/" class="back-btn">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-      Ana səhifəyə qayıt
-    </a>
+    <div class="top-nav">
+      <a href="/" class="back-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        Ana səhifəyə qayıt
+      </a>
+      <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Rejimi dəyiş">
+        <svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+      </button>
+    </div>
     
     <div id="docContainer" class="doc-container"></div>
   </div>
 
   <script src="/documents.js"></script>
   <script>
+    function updateThemeIcon() {
+      var currentTheme = document.documentElement.getAttribute('data-theme');
+      var icon = document.getElementById('themeIcon');
+      if (currentTheme === 'dark') {
+        icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+      } else {
+        icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+    }
+
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme');
+      var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      updateThemeIcon();
+      loadDocument();
+    });
+
     function loadDocument() {
       var container = document.getElementById('docContainer');
       if (!container) return;
@@ -207,12 +283,6 @@
             '<a href="/">Ana səhifəyə qayıt</a>' +
           '</div>';
       }
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', loadDocument);
-    } else {
-      loadDocument();
     }
   </script>
 </body>
