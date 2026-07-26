@@ -151,21 +151,27 @@
       gap: 16px;
     }
 
-    .doc-icon-box {
-      width: 44px;
-      height: 44px;
-      background: var(--primary-light);
-      border-radius: 12px;
+    /* Sıralama Nömrəsi Stili */
+    .doc-index {
+      width: 36px;
+      height: 36px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
       flex-shrink: 0;
+      transition: all 0.2s;
     }
 
-    .doc-icon-box svg {
-      width: 22px;
-      height: 22px;
-      stroke: var(--primary);
+    .doc-card:hover .doc-index {
+      background: var(--primary-light);
+      color: var(--primary);
+      border-color: #bfdbfe;
     }
 
     .doc-details {
@@ -273,8 +279,7 @@
         return;
       }
 
-      docs.forEach(function(doc) {
-        // Yenilənmiş təmiz URL formatı
+      docs.forEach(function(doc, index) {
         const docUrl = 'framework/' + doc.id;
         const docNo = doc.no ? '<span class="doc-badge">№ ' + doc.no + '</span>' : '';
 
@@ -283,9 +288,7 @@
         item.className = 'doc-card';
         item.innerHTML = 
           '<div class="doc-main">' +
-            '<div class="doc-icon-box">' +
-              '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>' +
-            '</div>' +
+            '<div class="doc-index">' + (index + 1) + '</div>' +
             '<div class="doc-details">' +
               '<div class="doc-title">' + doc.title + '</div>' +
               '<div class="doc-meta">' +
