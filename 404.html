@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <script>
-    // GitHub Pages 404 handler - clean URL router
+    // Custom domain üçün sadələşdirilmiş 404 router
     const path = window.location.pathname;
     const parts = path.split('/').filter(Boolean);
     
-    // Əgər /framework/226 kimi daxil olunubsa, query string ilə yönləndirir
     const frameworkIndex = parts.indexOf('framework');
     if (frameworkIndex !== -1 && parts[frameworkIndex + 1]) {
       const id = parts[frameworkIndex + 1];
-      const repoName = parts[0] === 'framework' ? '' : '/' + parts[0];
-      window.location.replace(repoName + '/framework/?id=' + id);
+      window.location.replace('/framework/?id=' + id);
     } else {
       window.location.replace('/');
     }
