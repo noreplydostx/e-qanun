@@ -180,10 +180,7 @@
   </style>
   <script>
     (function() {
-      var savedTheme = localStorage.getItem('theme');
-      if (!savedTheme) {
-        savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
+      var savedTheme = localStorage.getItem('theme') || 'light';
       document.documentElement.setAttribute('data-theme', savedTheme);
     })();
   </script>
