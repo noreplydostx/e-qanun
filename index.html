@@ -1,70 +1,67 @@
 <!-- Mərkəzləşdirilmiş sənəd bazası -->
-<script src="./documents.js"></script>
+  <script src="./documents.js"></script>
 
-<script>
-  // Bütün HTML DOM eleməntləri yükləndikdən sonra işə düşür
-  document.addEventListener('DOMContentLoaded', () => {
-    
-    // Sənədləri ekrana çıxaran funksiya
-    function renderDocuments(docs) {
-      const container = document.getElementById('documentList');
+  <script>
+    function initPortal() {
+      var container = document.getElementById('documentList');
       if (!container) return;
-      
-      container.innerHTML = '';
 
-      if (!docs || docs.length === 0) {
-        container.innerHTML = '<div class="status-msg">Axtarışa uyğun heç bir rəsmi sənəd tapılmadı.</div>';
-        return;
+      var docs = window.ALL_DOCUMENTS || [];
+
+      function render(items) {
+        container.innerHTML = '';
+        if (!items || items.length === 0) {
+          container.innerHTML = '<div class="status-msg">Sənəd tapılmadı.</div>';
+          return;
+        }
+
+        for (var i = 0; i < items.length; i++) {
+          var doc = items[i];
+          var docUrl = '/framework/' + doc.id;
+          var docNo = doc.no ? '<span class="doc-badge">№ ' + doc.no + '</span>' : '';
+
+          var a = document.createElement('a');
+          a.href = docUrl;
+          a.className = 'doc-card';
+          a.innerHTML = 
+            '<div class="doc-main">' +
+              '<div class="doc-index">' + (i + 1) + '</div>' +
+              '<div class="doc-details">' +
+                '<div class="doc-title">' + doc.title + '</div>' +
+                '<div class="doc-meta">' +
+                  docNo +
+                  '<span>Qəbul tarixi: ' + doc.date + '</span>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="btn-arrow">' +
+              '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+            '</div>';
+
+          container.appendChild(a);
+        }
       }
 
-      docs.forEach((doc, index) => {
-        const docUrl = '/framework/' + doc.id;
-        const docNo = doc.no ? `<span class="doc-badge">№ ${doc.no}</span>` : '';
+      // İlk yüklənmə
+      render(docs);
 
-        const item = document.createElement('a');
-        item.href = docUrl;
-        item.className = 'doc-card';
-        item.innerHTML = `
-          <div class="doc-main">
-            <div class="doc-index">${index + 1}</div>
-            <div class="doc-details">
-              <div class="doc-title">${doc.title}</div>
-              <div class="doc-meta">
-                ${docNo}
-                <span>Qəbul tarixi: ${doc.date}</span>
-              </div>
-            </div>
-          </div>
-          <div class="btn-arrow">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </div>
-        `;
-
-        container.appendChild(item);
-      });
-    }
-
-    // 1. Ilk olaraq mövcud sənədləri göstər
-    if (typeof ALL_DOCUMENTS !== 'undefined') {
-      renderDocuments(ALL_DOCUMENTS);
-    } else {
-      console.error("documents.js faylı tapılmadı və ya daxilində xəta var!");
-    }
-
-    // 2. Axtarış inputunu tapırıq və event dinləyicisi qoşuruq
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-      searchInput.addEventListener('input', function() {
-        const query = this.value.toLowerCase().trim();
-        if (typeof ALL_DOCUMENTS !== 'undefined') {
-          const filtered = ALL_DOCUMENTS.filter(doc => {
-            return (doc.title && doc.title.toLowerCase().includes(query)) ||
-                   (doc.no && doc.no.toLowerCase().includes(query)) ||
-                   (doc.date && doc.date.toLowerCase().includes(query));
+      // Axtarış
+      var searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          var query = this.value.toLowerCase().trim();
+          var filtered = docs.filter(function(doc) {
+            return (doc.title && doc.title.toLowerCase().indexOf(query) !== -1) ||
+                   (doc.no && doc.no.toLowerCase().indexOf(query) !== -1);
           });
-          renderDocuments(filtered);
-        }
-      });
+          render(filtered);
+        });
+      }
     }
-  });
-</script>
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPortal);
+    } else {
+      initPortal();
+    }
+  </script>
