@@ -9,6 +9,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-hover: #f1f5f9;
+      --border: #e2e8f0;
+      --border-focus: #2563eb;
+      --text-primary: #0f172a;
+      --text-secondary: #64748b;
+      --accent: #2563eb;
+      --accent-glow: rgba(37, 99, 235, 0.1);
+      --badge-bg: #eff6ff;
+      --badge-text: #2563eb;
+      --index-color: #94a3b8;
+    }
+
+    [data-theme="dark"] {
       --bg: #090d16;
       --surface: #111827;
       --surface-hover: #1f2937;
@@ -20,6 +35,7 @@
       --accent-glow: rgba(59, 130, 246, 0.15);
       --badge-bg: rgba(59, 130, 246, 0.1);
       --badge-text: #60a5fa;
+      --index-color: #64748b;
     }
 
     * {
@@ -37,11 +53,35 @@
       flex-direction: column;
       align-items: center;
       padding: 60px 20px;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     .wrapper {
       width: 100%;
       max-width: 840px;
+      position: relative;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--border-focus);
     }
 
     .header-section {
@@ -59,7 +99,7 @@
       color: var(--accent);
       border-radius: 16px;
       margin-bottom: 16px;
-      border: 1px solid rgba(59, 130, 246, 0.2);
+      border: 1px solid var(--border);
     }
 
     h1 {
@@ -67,9 +107,6 @@
       font-weight: 700;
       letter-spacing: -0.5px;
       margin-bottom: 8px;
-      background: linear-gradient(to right, #fff, #94a3b8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
 
     .subtitle {
@@ -101,7 +138,7 @@
       border-radius: 14px;
       outline: none;
       transition: all 0.25s ease;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
     }
 
     .search-box:focus {
@@ -126,14 +163,14 @@
       justify-content: space-between;
       align-items: center;
       transition: all 0.25s ease;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
 
     .doc-card:hover {
       background: var(--surface-hover);
-      border-color: rgba(59, 130, 246, 0.4);
+      border-color: var(--border-focus);
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
     }
 
     .doc-content {
@@ -142,15 +179,12 @@
       align-items: flex-start;
     }
 
-    .doc-icon-wrapper {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border);
-      padding: 10px;
-      border-radius: 10px;
-      color: var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .doc-number {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--index-color);
+      min-width: 24px;
+      padding-top: 2px;
     }
 
     .doc-title {
@@ -197,10 +231,25 @@
       border-radius: 14px;
     }
   </style>
+  <script>
+    // Səhifə yüklənməzdən əvvəl mövzunu tətbiq edirik ki, parıldama (flicker) olmasın
+    (function() {
+      var savedTheme = localStorage.getItem('theme');
+      if (!savedTheme) {
+        savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    })();
+  </script>
 </head>
 <body>
 
   <div class="wrapper">
+    <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Rejimi dəyiş">
+      <!-- İkonlar skript vasitəsilə və ya dinamik dəyişəcək -->
+      <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></svg>
+    </button>
+
     <div class="header-section">
       <div class="portal-logo">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
@@ -219,6 +268,31 @@
 
   <script src="/documents.js"></script>
   <script>
+    function updateThemeIcon() {
+      var currentTheme = document.documentElement.getAttribute('data-theme');
+      var icon = document.getElementById('themeIcon');
+      if (currentTheme === 'dark') {
+        // Günəş ikonu (işığa keçmək üçün)
+        icon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+      } else {
+        // Ay ikonu (qaranlığa keçmək üçün)
+        icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+    }
+
+    function toggleTheme() {
+      var currentTheme = document.documentElement.getAttribute('data-theme');
+      var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      updateThemeIcon();
+      initPortal();
+    });
+
     function initPortal() {
       var container = document.getElementById('documentList');
       if (!container) return;
@@ -242,9 +316,7 @@
           a.className = 'doc-card';
           a.innerHTML = 
             '<div class="doc-content">' +
-              '<div class="doc-icon-wrapper">' +
-                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-0-5H20"></path></svg>' +
-              '</div>' +
+              '<div class="doc-number">' + (i + 1) + '.</div>' +
               '<div>' +
                 '<div class="doc-title">' + doc.title + '</div>' +
                 '<div class="doc-meta">' + docNo + '<span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px; margin-right:4px;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> ' + doc.date + '</span></div>' +
@@ -272,12 +344,6 @@
           render(filtered);
         });
       }
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initPortal);
-    } else {
-      initPortal();
     }
   </script>
 </body>
