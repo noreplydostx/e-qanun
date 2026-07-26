@@ -1,50 +1,147 @@
-<!-- Mərkəzləşdirilmiş sənəd bazası -->
-  <script src="/documents.js"></script>
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sənəd | E-QANUN</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      margin: 0;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+    }
+    .back-link {
+      display: inline-block;
+      margin-bottom: 24px;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .back-link:hover { text-decoration: underline; }
+    .doc-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .doc-authority {
+      font-size: 13px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+    .doc-title {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: #0f172a;
+    }
+    .doc-body {
+      font-size: 15px;
+      line-height: 1.8;
+      color: #334155;
+      margin-bottom: 40px;
+    }
+    .paragraph {
+      margin-bottom: 16px;
+      text-align: justify;
+    }
+    .doc-footer {
+      margin-top: 40px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 14px;
+    }
+    .signer-title { font-weight: 600; }
+    .signer-name { font-weight: 700; color: #0f172a; }
+    .doc-location { color: #64748b; margin-top: 8px; }
+  </style>
+</head>
+<body>
 
+  <div class="container">
+    <a href="/" class="back-link">← Ana səhifəyə qayıt</a>
+    <div id="docContainer"></div>
+  </div>
+
+  <script src="../documents.js"></script>
   <script>
-    // URL-dən ID-ni və ya parametri götürürük
-    const urlParams = new URLSearchParams(window.location.search);
-    let docId = urlParams.get('id');
+    function loadDocument() {
+      var container = document.getElementById('docContainer');
+      if (!container) return;
 
-    if (!docId) {
-      const pathParts = window.location.pathname.split('/').filter(Boolean);
-      const frameworkIndex = pathParts.indexOf('framework');
-      if (frameworkIndex !== -1 && pathParts[frameworkIndex + 1]) {
-        docId = pathParts[frameworkIndex + 1];
+      var urlParams = new URLSearchParams(window.location.search);
+      var docId = urlParams.get('id');
+
+      if (!docId) {
+        var pathParts = window.location.pathname.split('/').filter(Boolean);
+        var frameworkIndex = pathParts.indexOf('framework');
+        if (frameworkIndex !== -1 && pathParts[frameworkIndex + 1]) {
+          docId = pathParts[frameworkIndex + 1];
+        }
+      }
+
+      var docs = window.ALL_DOCUMENTS || [];
+      var currentDoc = null;
+
+      for (var i = 0; i < docs.length; i++) {
+        if (docs[i].id === docId) {
+          currentDoc = docs[i];
+          break;
+        }
+      }
+
+      if (currentDoc) {
+        document.title = currentDoc.title + " | E-QANUN";
+        
+        var paragraphsHtml = '';
+        if (currentDoc.paragraphs) {
+          for (var j = 0; j < currentDoc.paragraphs.length; j++) {
+            paragraphsHtml += '<p class="paragraph">' + currentDoc.paragraphs[j] + '</p>';
+          }
+        }
+
+        container.innerHTML = 
+          '<div class="doc-header">' +
+            '<div class="doc-authority">' + (currentDoc.authority || '') + '</div>' +
+            '<h1 class="doc-title">' + currentDoc.title + '</h1>' +
+          '</div>' +
+          '<div class="doc-body">' + paragraphsHtml + '</div>' +
+          '<div class="doc-footer">' +
+            '<div class="signer-title">' + (currentDoc.signerTitle || '') + '</div>' +
+            '<div class="signer-name">' + (currentDoc.signerName || '') + '</div>' +
+            '<div class="doc-location">' + (currentDoc.location || '') + ', ' + (currentDoc.date || '') + '</div>' +
+          '</div>';
+      } else {
+        container.innerHTML = 
+          '<div style="text-align:center; padding: 40px;">' +
+            '<h2>Sənəd tapılmadı</h2>' +
+            '<p style="color:#64748b; margin-top:10px;">Axtardığınız sənəd mövcud deyil.</p>' +
+            '<a href="/" style="display:inline-block; margin-top:15px; color:#2563eb; text-decoration:none;">Ana səhifəyə qayıt</a>' +
+          '</div>';
       }
     }
 
-    // ALL_DOCUMENTS siyahısından həmin ID-yə uyğun sənədi tapırıq
-    const currentDoc = ALL_DOCUMENTS.find(doc => doc.id === docId);
-
-    if (currentDoc) {
-      document.title = currentDoc.title + " | E-QANUN";
-      
-      const contentHtml = `
-        <div class="doc-header">
-          <div class="doc-authority">${currentDoc.authority || ''}</div>
-          <h1 class="doc-title">${currentDoc.title}</h1>
-        </div>
-        
-        <div class="doc-body">
-          ${currentDoc.paragraphs.map(p => `<p class="paragraph">${p}</p>`).join('')}
-        </div>
-
-        <div class="doc-footer">
-          <div class="signer-title">${currentDoc.signerTitle || ''}</div>
-          <div class="signer-name">${currentDoc.signerName || ''}</div>
-          <div class="doc-location">${currentDoc.location || ''}, ${currentDoc.date || ''}</div>
-        </div>
-      `;
-      
-      document.getElementById('docContainer').innerHTML = contentHtml;
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadDocument);
     } else {
-      document.getElementById('docContainer').innerHTML = `
-        <div style="text-align:center; padding: 50px;">
-          <h2>Sənəd tapılmadı</h2>
-          <p style="color:#64748b; margin-top:10px;">Axtardığınız ID ilə sənəd bazada mövcut deyil.</p>
-          <a href="/" style="display:inline-block; margin-top:20px; color:#2563eb;">Ana səhifəyə qayıt</a>
-        </div>
-      `;
+      loadDocument();
     }
   </script>
+</body>
+</html>
