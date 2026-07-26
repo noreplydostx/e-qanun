@@ -1,12 +1,11 @@
-const ALL_DOCUMENTS = [
+window.ALL_DOCUMENTS = [
   {
     id: "226",
     no: "226",
     title: "“Süni intellektin inkişafı üçün milli prioritet sektorların və müvafiq sektor üzrə məsul dövlət orqanlarının (qurumlarının) siyahısı”nın təsdiq edilməsi haqqında",
     authority: "AZƏRBAYCAN RESPUBLİKASI NAZİRLƏR KABİNETİNİN QƏRARI",
     paragraphs: [
-      "Birinci abzasın mətni...",
-      "İkinci abzasın mətni..."
+      "Süni intellekt texnologiyalarının tətbiqinin genişləndirilməsi məqsədilə..."
     ],
     signerName: "Əli ƏSƏDOV",
     signerTitle: "Azərbaycan Respublikasının Baş naziri",
