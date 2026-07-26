@@ -29,7 +29,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Hero Section */
     .hero {
       background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e3a8a 100%);
       color: #fff;
@@ -37,17 +36,6 @@
       text-align: center;
       position: relative;
       overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at center, rgba(37, 99, 235, 0.15) 0%, transparent 60%);
-      pointer-events: none;
     }
 
     .hero-container {
@@ -86,10 +74,8 @@
     .hero p {
       color: #94a3b8;
       font-size: 16px;
-      font-weight: 400;
     }
 
-    /* Main Container */
     .container {
       max-width: 850px;
       margin: -35px auto 60px auto;
@@ -98,7 +84,6 @@
       z-index: 2;
     }
 
-    /* Search Box */
     .search-box {
       background: var(--surface);
       padding: 8px 8px 8px 20px;
@@ -133,11 +118,6 @@
       background: transparent;
     }
 
-    .search-box input::placeholder {
-      color: #94a3b8;
-    }
-
-    /* Document Cards */
     .doc-list {
       margin-top: 28px;
       display: flex;
@@ -254,7 +234,6 @@
 </head>
 <body>
 
-  <!-- Hero Header -->
   <header class="hero">
     <div class="hero-container">
       <div class="brand-tag">
@@ -266,7 +245,6 @@
     </div>
   </header>
 
-  <!-- Content Area -->
   <div class="container">
     <div class="search-box">
       <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -279,16 +257,10 @@
   <script>
     const allDocuments = [
       {
-        id: "1",
-        no: "AK-102",
-        title: "Azərbaycan Respublikasının Konstitusiyası",
-        date: "12 noyabr 1995"
-      },
-      {
-        id: "2",
-        no: "482",
-        title: "R.A.Abbasovun 2-ci dərəcəli ordenlə təltif edilməsi haqqında",
-        date: "22 iyul 2026"
+        id: "226",
+        no: "226",
+        title: "“Süni intellektin inkişafı üçün milli prioritet sektorların və müvafiq sektor üzrə məsul dövlət orqanlarının (qurumlarının) siyahısı”nın təsdiq edilməsi haqqında",
+        date: "21 iyul 2026"
       }
     ];
 
@@ -302,7 +274,8 @@
       }
 
       docs.forEach(function(doc) {
-        const docUrl = 'framework/?id=' + encodeURIComponent(doc.id);
+        // Yenilənmiş təmiz URL formatı
+        const docUrl = 'framework/' + doc.id;
         const docNo = doc.no ? '<span class="doc-badge">№ ' + doc.no + '</span>' : '';
 
         const item = document.createElement('a');
