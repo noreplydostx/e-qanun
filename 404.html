@@ -2,20 +2,15 @@
 <html lang="az">
 <head>
   <meta charset="UTF-8">
-  <title>Yönləndirilir...</title>
   <script>
-    // URL yolunu analiz edirik
-    const path = window.location.pathname;
-    const parts = path.split('/').filter(Boolean);
+    var path = window.location.pathname;
+    var parts = path.split('/').filter(Boolean);
     
-    // Əgər istifadəçi /framework/227 kimi bir ünvana giribsə:
-    const frameworkIndex = parts.indexOf('framework');
+    var frameworkIndex = parts.indexOf('framework');
     if (frameworkIndex !== -1 && parts[frameworkIndex + 1]) {
-      const id = parts[frameworkIndex + 1];
-      // Parametrli ünvana yönləndiririk: /framework/?id=227
+      var id = parts[frameworkIndex + 1];
       window.location.replace('/framework/?id=' + id);
     } else {
-      // Başqa səhv keçid olarsa ana səhifəyə qaytarırıq
       window.location.replace('/');
     }
   </script>
