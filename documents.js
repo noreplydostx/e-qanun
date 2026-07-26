@@ -1,20 +1,7 @@
 window.ALL_DOCUMENTS = [
   {
-    id: "226",
-    no: "226",
-    title: "“Süni intellektin inkişafı üçün milli prioritet sektorların və müvafiq sektor üzrə məsul dövlət orqanlarının (qurumlarının) siyahısı”nın təsdiq edilməsi haqqında",
-    authority: "AZƏRBAYCAN RESPUBLİKASI NAZİRLƏR KABİNETİNİN QƏRARI",
-    paragraphs: [
-      "Süni intellekt texnologiyalarının tətbiqinin genişləndirilməsi məqsədilə..."
-    ],
-    signerName: "Əli ƏSƏDOV",
-    signerTitle: "Azərbaycan Respublikasının Baş naziri",
-    location: "Bakı şəhəri",
-    date: "21 iyul 2026-cı il"
-  },
-  {
-    id: "227",
-    no: "227",
+    id: "000",
+    no: "000",
     title: "Dostlarstan Respublikası dövlətinin bərpası haqqında",
     authority: "DOSTLARSTAN RESPUBLİKASININ QƏRARI",
     paragraphs: [
