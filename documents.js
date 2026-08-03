@@ -15,7 +15,7 @@ window.ALL_DOCUMENTS = [
     signerTitle: "Dostlarstan Respublikasının Dövləti",
     location: "Kristaveli şəhəri",
     date: "25 iyul 2026-cı il"
-
+    ],
     {
     id: "001",
     no: "001",
