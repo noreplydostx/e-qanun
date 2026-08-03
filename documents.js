@@ -15,5 +15,20 @@ window.ALL_DOCUMENTS = [
     signerTitle: "Dostlarstan Respublikasının Dövləti",
     location: "Kristaveli şəhəri",
     date: "25 iyul 2026-cı il"
+
+    {
+    id: "001",
+    no: "001",
+    title: "Emin Mamedovun “blat”ının ləğv edilməsi haqqında",
+    authority: "DOSTLARSTAN RESPUBLİKASI PREZİDENTİNİN SƏRƏNCAMI",
+    paragraphs: [
+      "Dostlarstan Respublikası Konstitusiyasını rəhbər tutaraq qərara alıram:",
+      "Dostlarstan Respublikası ilə ədalətin və sağlam məntiqin bərqərar olunmasında heç bir xüsusi xidməti olmayan, əksinə, hər zaman xüsusi güzəştləri (blatı) aşkar şəkildə sui-istifadə edən Emin Mamedovun bütün "blat" imtiyazları 03.08.2026 tarixindən etibarən ləğv edilsin.",
+      "Bundan sonra Emin Mamedov üçün hər hansı qohumbazlıq, tanışlıq və ya növbədənkənar "hörmət" yolu ilə həll olunan məsələlərin istifadəsi qəti şəkildə qadağan olunsun.",
+    ],
+    signerName: "Aslan ASLANOV",
+    signerTitle: "Dostlarstan Respublikasının Prezidenti",
+    location: "Kristaveli şəhəri",
+    date: "03 avqust 2026-cı il"
   }
 ];
