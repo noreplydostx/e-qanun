@@ -31,4 +31,21 @@ window.ALL_DOCUMENTS = [
     location: "Kristaveli şəhəri",
     date: "03 avqust 2026-cı il"
   }
+  },
+  {
+    id: "002",
+    no: "002",
+    title: "Dostlarstan Respublikasının dövlət serverlərinin mərkəzləşdirilmiş qaydada təmin edilməsi haqqında",
+    authority: "DOSTLARSTAN RESPUBLİKASI PREZİDENTİNİN FƏRMANI",
+    paragraphs: [
+      "Dostlarstan Respublikasında rəqəmsal idarəetmənin təkmilləşdirilməsi, dövlət məlumatlarının təhlükəsizliyinin qorunması və vahid elektron infrastrukturun yaradılması məqsədilə, Dostlarstan Respublikasının Konstitusiyasına uyğun olaraq qərara alıram:",
+      "1. Dostlarstan Respublikasının bütün dövlət qurumlarının istifadəsində olan informasiya sistemləri və serverləri mərkəzləşdirilərək Dostlarstan Respublikasının Rəqəmsal İnkişaf Nazirliyi nəzdində vahid dövlət bulud infrastrukturuna köçürülsün.",
+      "2. Dövlət serverlərinin alınması, quraşdırılması və təhlükəsizlik sistemləri ilə təmin edilməsi üçün dövlət büdcəsindən zəruri maliyyə vəsaiti ayrılması təmin olunsun.",
+      "3. Serverlərdə emal olunan məlumatların kənar müdaxilələrdən qorunması üçün milli təhlükəsizlik standartlarına cavab verən gücləndirilmiş mühafizə sistemləri tətbiq edilsin."
+    ],
+    signerName: "Aslan ASLANOV",
+    signerTitle: "Dostlarstan Respublikasının Prezidenti",
+    location: "Kristaveli şəhəri",
+    date: "06 avqust 2026-cı il"
+  }
 ];
