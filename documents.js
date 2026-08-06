@@ -30,7 +30,6 @@ window.ALL_DOCUMENTS = [
     signerTitle: "Dostlarstan Respublikasının Prezidenti",
     location: "Kristaveli şəhəri",
     date: "03 avqust 2026-cı il"
-  }
   },
   {
     id: "002",
